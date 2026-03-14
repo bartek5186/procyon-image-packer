@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./proycon-image-packer.png" alt="Procyon Image Packer" width="360" />
+</p>
+
 # Procyon Image Packer
 
 Batchowy optymalizator obrazow dla attachmentow WordPressa, uruchamiany przez zewnetrzny runner shellowy.
