@@ -10,30 +10,31 @@ class Frontend {
         add_filter('wp_calculate_image_srcset', [__CLASS__, 'filter_attachment_srcset'], 20, 5);
     }
 
-    public static function filter_attachment_url(string $url, int $attachment_id): string {
+    public static function filter_attachment_url($url, $attachment_id) {
         unset($attachment_id);
+        if (!is_string($url) || $url === '') return $url;
         return self::rewrite_url($url);
     }
 
-    public static function filter_attachment_image_src($image, int $attachment_id, $size, bool $icon) {
+    public static function filter_attachment_image_src($image, $attachment_id, $size, $icon) {
         unset($attachment_id, $size, $icon);
 
-        if (!is_array($image) || empty($image[0])) {
+        if (!is_array($image) || empty($image[0]) || !is_string($image[0])) {
             return $image;
         }
 
-        $image[0] = self::rewrite_url((string) $image[0]);
+        $image[0] = self::rewrite_url($image[0]);
         return $image;
     }
 
-    public static function filter_attachment_srcset(array $sources, array $size_array, string $image_src, array $image_meta, int $attachment_id): array {
+    public static function filter_attachment_srcset($sources, $size_array, $image_src, $image_meta, $attachment_id) {
         unset($size_array, $image_src, $image_meta, $attachment_id);
 
-        if (!$sources) return $sources;
+        if (!is_array($sources) || !$sources) return $sources;
 
         foreach ($sources as $descriptor => $source) {
-            if (!is_array($source) || empty($source['url'])) continue;
-            $sources[$descriptor]['url'] = self::rewrite_url((string) $source['url']);
+            if (!is_array($source) || empty($source['url']) || !is_string($source['url'])) continue;
+            $sources[$descriptor]['url'] = self::rewrite_url($source['url']);
         }
 
         return $sources;
